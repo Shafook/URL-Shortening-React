@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import ShortLink from './ShortLink';
 
 const API = 'https://api.shrtco.de/v2/shorten?url=';
@@ -8,29 +8,6 @@ const Shorten = () => {
   const [link, setLink] = useState('');
   const [isValid, setIsValid] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [clickedIndex, setClickedIndex] = useState(0);
-
-  const [buttonElems, setButtonElems] = useState([]);
-
-  const btnContainer = useRef(null);
-
-  useEffect(() => {
-    buttonElems.forEach((elem) => {
-      elem.style.color = 'red';
-    });
-  }, [list]);
-
-  useEffect(() => {
-    // btnContainer.current.querySelectorAll('.copy-button').forEach((btn) => {
-    //   btn.style.backgroundColor = 'hsl(180, 66%, 49%)';
-    //   btn.textContent = 'Copy';
-    // });
-    console.log(buttonElems);
-  }, [buttonElems]);
-
-  const addButtonElems = (elem) => {
-    setButtonElems([...buttonElems, elem]);
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -46,8 +23,13 @@ const Shorten = () => {
     const data = await resp.json();
 
     if (data.ok) {
-      const { original_link, full_short_link } = data.result;
-      const newItem = { original_link, short_link: full_short_link };
+      const { original_link, full_short_link, code } = data.result;
+      const newItem = {
+        original_link,
+        short_link: full_short_link,
+        id: code,
+        clicked: false,
+      };
       setlist([newItem, ...list]);
       setIsValid(true);
     } else {
@@ -69,21 +51,14 @@ const Shorten = () => {
 
       <div className='container container--pall'>
         <div className='shorten__list'>
-          <ul ref={btnContainer} id='shortLinks'>
+          <ul id='shortLinks'>
             {list.map((item, index) => {
-              let clicked = false;
-              if (index === clickedIndex + 1) {
-                clicked = true;
-              }
               return (
                 <ShortLink
-                  key={index}
+                  key={item.id}
                   {...item}
-                  index={index}
-                  setClickedIndex={setClickedIndex}
-                  btnContainer={btnContainer}
-                  clicked={clicked}
-                  addButtonElems={addButtonElems}
+                  list={list}
+                  setList={setlist}
                 />
               );
             })}
