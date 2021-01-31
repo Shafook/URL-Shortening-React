@@ -3,7 +3,11 @@ import brand from '../images/icon-brand-recognition.svg';
 import records from '../images/icon-detailed-records.svg';
 import custom from '../images/icon-fully-customizable.svg';
 
+import features from '../data';
+const images = [brand, records, custom];
+
 const Features = () => {
+  console.log(features);
   return (
     <section className='features'>
       <div className='container container--pall'>
@@ -16,38 +20,18 @@ const Features = () => {
         </div>
 
         <div className='features__grid'>
-          <div className='features__item'>
-            <div className='features__icon'>
-              <img src={brand} alt='' />
-            </div>
-            <div className='features__title'>Brand Recognition</div>
-            <div className='features__description'>
-              Boost your brand recognition with each click. Generic links don’t
-              mean a thing. Branded links help instil confidence in your
-              content.
-            </div>
-          </div>
-          <div className='features__item'>
-            <div className='features__icon'>
-              <img src={records} alt='' />
-            </div>
-            <div className='features__title'>Detailed Records</div>
-            <div className='features__description'>
-              Gain insights into who is clicking your links. Knowing when and
-              where people engage with your content helps inform better
-              decisions.
-            </div>
-          </div>
-          <div className='features__item'>
-            <div className='features__icon'>
-              <img src={custom} alt='' />
-            </div>
-            <div className='features__title'>Fully Customizable</div>
-            <div className='features__description'>
-              Improve brand awareness and content discoverability through
-              customizable links, supercharging audience engagement.
-            </div>
-          </div>
+          {features.map((feature, index) => {
+            const { title, description } = feature;
+            return (
+              <div key={index} className='features__item'>
+                <div className='features__icon'>
+                  <img src={images[index]} alt={title} />
+                </div>
+                <div className='features__title'>{title}</div>
+                <div className='features__description'>{description}</div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
